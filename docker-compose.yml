@@ -1,0 +1,36 @@
+
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: sit722_part5_user
+      POSTGRES_PASSWORD: zZJBsB6MpuMLpa28pCDkVcTkt8cwrbly
+      POSTGRES_DB: sit722_part5
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+ 
+  book_catalog:
+    build: ./book_catalog
+    container_name: book_catalog
+    environment:
+      DATABASE_URL: "postgresql://sit722_part5_user:zZJBsB6MpuMLpa28pCDkVcTkt8cwrbly@dpg-crglo5ij1k6c739j9irg-a.oregon-postgres.render.com/sit722_part5"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+ 
+  inventory_management:
+    build: ./inventory_management
+    container_name: inventory_management
+    environment:
+      DATABASE_URL: "postgresql://sit722_part5_user:zZJBsB6MpuMLpa28pCDkVcTkt8cwrbly@dpg-crglo5ij1k6c739j9irg-a.oregon-postgres.render.com/sit722_part5"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+volumes:
+  postgres_data:
